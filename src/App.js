@@ -1,3 +1,4 @@
+import React from "react";
 import "./index.css";
 const pizzaData = [
   {
@@ -5,7 +6,7 @@ const pizzaData = [
     ingredients: "Bread with italian olive oil and rosemary",
     price: 6,
     photoName: "pizzas/focaccia.jpg",
-    soldOut: false,
+    soldOut: true,
   },
   {
     name: "Pizza Margherita",
@@ -26,7 +27,7 @@ const pizzaData = [
     ingredients: "Tomato, mozarella, mushrooms, and onion",
     price: 12,
     photoName: "pizzas/funghi.jpg",
-    soldOut: false,
+    soldOut: true,
   },
   {
     name: "Pizza Salamino",
@@ -46,7 +47,7 @@ const pizzaData = [
 
 export default function App() {
   return (
-    <div>
+    <div className="container">
       <Heading />
       <Menu />
       <Footer />
@@ -54,35 +55,43 @@ export default function App() {
   );
 }
 function Menu() {
+  const pizzas = pizzaData;
+  const numPizza = pizzas.length;
   return (
     <main className="menu">
       <h1>Our Pizza's List</h1>
-      <Pizza
-        name="Spinaci Pizza"
-        ingredients="tomato, mozarella, spinach, and ricotta cheese"
-        photoName="/pizzas/spinaci.jpg"
-        price={16}
-      />
-      <Pizza
-        name="Pizza Funghi"
-        ingredients="Tomato, mozarella, mushrooms, and onion"
-        price={12}
-        photoName="pizzas/funghi.jpg"
-      />
+      {numPizza > 0 ? (
+        <>
+          <p>
+            we have a lot of different Pizza as you see on the lists.we have
+            finished Our Procedure
+          </p>
+          <ul className="pizzas">
+            {pizzas.map((pizza) => (
+              <Pizza key={pizza.name} pizzaObj={pizza} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>We will provide our pizzas menu in recent feature </p>
+      )}
     </main>
   );
 }
-function Pizza(props) {
+function Pizza({ pizzaObj }) {
+  // if (pizzaObj.soldOut) return null;
   return (
-    <div className="pizza">
+    <li className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
       <img
-        src={props.photoName} // Correct relative path
-        alt={props.name}
-      />
-      <h3>{props.name}</h3>
-      <p>{props.ingredients}</p>
-      <span>{props.price + 5}</span>
-    </div>
+        src={pizzaObj.photoName} // Correct relative path
+        alt={pizzaObj.name}
+      />{" "}
+      <div>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        <span>{pizzaObj.soldOut ? "SOLD OUT" : pizzaObj.price}</span>
+      </div>
+    </li>
   );
 }
 function Heading() {
@@ -105,7 +114,25 @@ function Footer() {
 
   return (
     <footer className="footer">
-      <strong>{new Date().getFullYear()}</strong>We are Currently open!
+      {{ isOpen } ? (
+        <Order closeHours={closeHour} openHours={openHour} />
+      ) : (
+        <p>
+          please come back,we are happy if you come on between {openHour}:00 and
+          {closeHour}:00 hour
+        </p>
+      )}
     </footer>
+  );
+}
+function Order({ closeHours, openHours }) {
+  return (
+    <div className="order">
+      <p>
+        we 're open from {openHours}:00 to {closeHours}:00 .come visit us and
+        order online
+      </p>
+      <button class="btn"> order</button>
+    </div>
   );
 }
